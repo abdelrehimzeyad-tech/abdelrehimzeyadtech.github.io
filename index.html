@@ -1,0 +1,344 @@
+<html lang="en">
+<head>
+  <!--the encoding of the text rendering  -->
+  <meta charset="utf-8" />
+<!--page title shwn in browser tab -->
+  <title>Ultimate Nerd Desk — Flip Cards</title>
+
+  <!-- imported google fonts for the title and body text,used awesome icon for the icons  -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* root variables,defining reuasable css variables for colors,sizes and others */
+    :root {
+      /*gradiants and card width,heignt*/
+      --bg-a: #040617;
+      --bg-b: #0b1020;
+      --muted: #b8c7e0;
+      --accent: #7c5cff;
+      --card-w: 340px;
+      --card-h: 420px;
+    }
+
+    /* reset*/
+    * { box-sizing: border-box; }
+   /*the body styling, the base look of the page,adjusting page margins, adding colors*/ body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, var(--bg-a), var(--bg-b));
+      color: #e8f0ff;
+      font-family: Inter, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding: 44px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+/*the heading and subtitles */
+    h1 {
+      font-family: Orbitron, sans-serif;
+      font-size: 26px;
+      margin: 0 0 6px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 22px;
+      text-align: center;
+    }
+
+    /*wrapper grid for all cards*/
+    .wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(var(--card-w), 1fr));
+      gap: 22px;
+      max-width: 1100px;
+      width: 100%;
+      padding-bottom: 44px;
+      /*3d depth for flipping*/
+      
+    }
+
+    /* card container for each card */
+    .card {
+      width: var(--card-w);/*width*/
+      height: var(--card-h);/*height*/
+      perspective: 1200px;
+      position: relative;
+    }
+
+    /* Hidden checkbox (flip trigger) */
+    .more {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Card content wrapper (flips on checkbox) */
+    .content {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 700ms cubic-bezier(.2, .9, .3, 1);
+    }
+    .more:checked + .content { transform: rotateY(180deg); }
+
+    /* front and back styles */
+    .front, .back {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 36px rgba(2,8,23,0.6);
+    }
+/*front side*/
+    .front {
+      background-size: cover;
+      background-position: center;
+    }
+    /*dark gradiant on the front of image*/
+    .front::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(4,4,12,0.24), rgba(2,8,23,0.6));
+    }
+/*container for text/buttons*/
+    .front .inner {
+      position: relative;
+      z-index: 2;
+      background: rgba(4,6,14,0.85);
+      border-radius: 8px;
+      margin: 40px auto; /* smaller black box */
+      padding: 18px;
+      width: 80%;
+      max-width: 240px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+    /*front title*/
+    .front h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+   /*smaller info badge*/
+    .badge {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.45);
+      color: #dfe9ff;
+      margin-bottom: 18px;
+    }
+/*back of the card*/
+    .back {
+      transform: rotateY(180deg);
+      background: linear-gradient(180deg, rgba(15,18,30,0.98), rgba(10,12,24,0.98));
+      padding: 18px;
+    }
+/*back content container*/
+    .back .inner {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+/*back title*/
+    .back h3 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--accent);
+    }
+/*description text*/
+    .desc {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+/*spec list*/
+    .specs {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    /*spec row and icons*/
+    .specs li {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 14px;
+    }
+    .specs i {
+      width: 20px;
+      text-align: center;
+      color: var(--accent);
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /*button styles*/
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      color: #fff;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1);
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.6px;
+      transition: all 0.2s ease;
+    }/*hover effect on the button*/
+    .button:hover {
+      background: linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1));
+    }
+    .button.return {
+      background: transparent;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      margin-top: auto;
+      align-self: flex-end;
+    }
+
+ 
+  </style>
+</head>
+  
+  
+  
+  
+  
+<body>
+  <main>
+    <!-- page heading and the description-->
+    <h1>Ultimate Nerd Desk — Featured Gear</h1>
+    <p class="subtitle">Click <strong>Details</strong> to flip each card, then <strong>Back</strong> to close.</p>
+    <!-- holds oll the product cards-->
+    <div class="wrapper">
+
+      <!-- 1st Card -->
+      <div class="card">
+        <!--toggle flip checkbox-->
+        <input class="more" type="checkbox" id="card1">
+        <div class="content">
+          <!--front side, images from unsplash -->
+          <div class="front" style="background-image:url('https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=800&q=80')">
+            <div class="inner">
+              <h2>Custom Keyboard</h2>
+              <div class="badge">Hot-swap • 65% • RGB</div>
+             <!-- label check box-->
+              <label class="button" for="card1">Details</label>
+            </div>
+          </div>
+          <!--back side-->
+          <div class="back">
+            <div class="inner">
+              <h3>Type in comfort</h3>
+              <p class="desc">Premium mechanical keyboard with hot-swappable switches, customizable RGB lighting, and premium keycaps for the ultimate typing experience.</p>
+              <ul class="specs">
+                <li><i class="fa-solid fa-keyboard"></i> Hot-swappable switches</li>
+                <li><i class="fa-solid fa-paintbrush"></i> PBT double-shot keycaps</li>
+                <li><i class="fa-solid fa-bolt"></i> Per-key RGB lighting</li>
+                <li><i class="fa-solid fa-plug"></i> USB-C connectivity</li>
+              </ul>
+              <!--price and back button-->
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                <div class="price">From €129</div>
+                <label class="button return" for="card1">Back</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--2nd Card-->
+      <div class="card">
+        <input class="more" type="checkbox" id="card2">
+        <div class="content">
+          <div class="front" style="background-image:url('https://images.unsplash.com/photo-1650228965270-014945544212?q=80&w=1335&auto=format&fit=crop')">
+            <div class="inner">
+              <h2>Retro Handheld</h2>
+              <div class="badge">Preloaded • HDMI • Save states</div>
+              <label class="button" for="card2">Details</label>
+            </div>
+          </div>
+          <div class="back">
+            <div class="inner">
+              <h3>Play anywhere</h3>
+              <p class="desc">Classic retro gaming handheld with 100+ preloaded games, rechargeable battery, and HDMI output for TV play.</p>
+              <ul class="specs">
+                <li><i class="fa-solid fa-gamepad"></i> 100+ classic games</li>
+                <li><i class="fa-solid fa-bolt"></i> 8-10 hour battery life</li>
+                <li><i class="fa-solid fa-tv"></i> HDMI 1080p output</li>
+                <li><i class="fa-solid fa-sd-card"></i> Expandable storage</li>
+              </ul>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                <div class="price">€89</div>
+                <label class="button return" for="card2">Back</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--3rd Card-->
+      <div class="card">
+        <input class="more" type="checkbox" id="card3">
+        <div class="content">
+          <div class="front" style="background-image:url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80')">
+            <div class="inner">
+              <h2>NC Headphones</h2>
+              <div class="badge">ANC • Mic • 30h</div>
+              <label class="button" for="card3">Details</label>
+            </div>
+          </div>
+          <div class="back">
+            <div class="inner">
+              <h3>Focus mode: ON</h3>
+              <p class="desc">Premium noise-cancelling headphones with hybrid ANC technology, crystal clear audio, and all-day comfort.</p>
+              <ul class="specs">
+                <li><i class="fa-solid fa-volume-high"></i> Hybrid active noise cancellation</li>
+                <li><i class="fa-solid fa-bluetooth"></i> Bluetooth 5.3</li>
+                <li><i class="fa-solid fa-battery-full"></i> 30-hour battery</li>
+                <li><i class="fa-solid fa-microphone"></i> Beamforming mic array</li>
+              </ul>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                <div class="price">€149</div>
+                <label class="button return" for="card3">Back</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+<!--thia ia for icon rendering of Font Awesome JS-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
